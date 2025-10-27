@@ -2,27 +2,13 @@ import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Random;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
@@ -109,7 +95,7 @@ public class MyFrame extends JFrame{
                 default : 
                     JOptionPane.showMessageDialog(null, "please Choose a better option");
                     break;
-                    
+
                 // Add more options in the future, when algos get updated, this should be modular, so not much work needs to be done.
                 }
                 currentAlgorithm.reset(array);
