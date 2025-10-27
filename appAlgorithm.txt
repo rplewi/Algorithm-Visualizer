@@ -4,4 +4,7 @@ How to approach:
 - Main GUI, Has a list of algorithms (bucket-sort, quick-sort, merge-sort)
 - User selects one, and is allowed to put in the amount of columns present in the sort. (10-100 ~ 1000?)
 - Brings them to a new pane, lists number of columns, does not need to show data values explcitly.
-- 
+
+
+Other important parts:
+- Need to have a timer so the sorted array doesn't just appear when the user clicks "start". Need to have a timer that iterates every 20ms, to make it look nice.
