@@ -9,46 +9,60 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import sortingAlgorithms.SortAlgorithm;
 import sortingAlgorithms.quickSort;
 
-
-
 public class MyFrame extends JFrame{
     private int[] array;
-    private String sortType = "";
-    private int sortNum = 0;
+    private int sortNum = 0; // Placeholder for when I want specified numbers
     private SortAlgorithm currentAlgorithm;
     private Timer timer;
+    private int barHeightMultiplier = 10; // Controls how tall the bars are
     
-    public void randomizeArray(){
-        Random rnd = new Random();
-        for (int i = 0; i < array.length; i++){
-            array[i] = rnd.nextInt(500) + 50;
+    public void randomizeArray() {
+        int size = array.length;
+
+        // Fill with ordered numbers (e.g., 1 to size)
+        for (int i = 0; i < size; i++) {
+            array[i] = i + 1; // ensures uniqueness
         }
-    }
+
+        // Shuffle them randomly
+        List<Integer> list = new ArrayList<>();
+        for (int num : array) list.add(num);
+        Collections.shuffle(list);
+
+        // Copy back into the array
+        for (int i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+    }   
 
     public void beginSort(JPanel visualizer) {
-    timer = new Timer(20, e -> {
-        boolean done = currentAlgorithm.step();
-        visualizer.repaint();
-        if (done) {
-            ((Timer) e.getSource()).stop();
-        }
-    });
-    timer.start();
+        timer = new Timer(30, e -> {
+            boolean done = currentAlgorithm.step();
+            visualizer.repaint();
+            if (done) {
+                ((Timer) e.getSource()).stop();
+            }
+        });
+        timer.start();
     }
-    
 
     public void setupGUI(){
-        setBounds(100,200,700,500);
+        setBounds(100,200,600,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Algorithm-Visualizer");
         Container c = getContentPane();
-        array = new int[200];
+        array = new int[50];
         randomizeArray();
 
         JPanel visualizer = new JPanel(){
@@ -58,11 +72,27 @@ public class MyFrame extends JFrame{
                 int width = getWidth();
                 int height = getHeight();
                 int barWidth = width / array.length;
+            
+                quickSort qs = (currentAlgorithm instanceof quickSort) ? (quickSort) currentAlgorithm : null;
+                Set<Integer> pivotIndices = qs != null ? qs.getPivotIndices() : Collections.emptySet();
+                Set<Integer> currentIndices = qs != null ? qs.getCurrentIndices() : Collections.emptySet();
+                Set<Integer> partitionIndices = qs != null ? qs.getPartitionIndices() : Collections.emptySet();
+                Set<Integer> rangeIndices = qs != null ? qs.getRangeIndices() : Collections.emptySet();
 
-                for (int i = 0; i < array.length; i++){
-                    int barHeight = array[i];
-                    g.setColor(Color.WHITE);
-                    g.fillRect(i * 5, height - barHeight, barWidth - 5, barHeight);
+                for (int i = 0; i < array.length; i++) {
+                    if (pivotIndices.contains(i)) {
+                        g.setColor(Color.RED);      // Pivot - RED
+                    } else if (currentIndices.contains(i)) {
+                        g.setColor(Color.YELLOW);   // Current element being compared - YELLOW
+                    } else if (partitionIndices.contains(i)) {
+                        g.setColor(Color.GREEN);    // Partition position - GREEN
+                    } else if (rangeIndices.contains(i)) {
+                        g.setColor(Color.BLUE);     // Range being partitioned - BLUE
+                    } else {
+                        g.setColor(Color.WHITE);    // Regular - WHITE
+                    }
+                    int barHeight = array[i] * barHeightMultiplier;
+                    g.fillRect(i * barWidth, height - barHeight, barWidth - 1, barHeight);
                 }
             }
         };
@@ -109,7 +139,6 @@ public class MyFrame extends JFrame{
         c.add(nav, BorderLayout.NORTH);
         visualizer.setBackground(Color.BLACK);
         c.add(visualizer, BorderLayout.CENTER);
-
 
         setVisible(true);
         
