@@ -1,6 +1,8 @@
 package sortingAlgorithms;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -196,5 +198,15 @@ public class quickSort implements SortAlgorithm{
     }
     public int[] getCurrentRange() {
         return currentRange;
+    }
+    
+    @Override
+    public Map<String, Set<Integer>> getVisualizationState() {
+        Map<String, Set<Integer>> state = new HashMap<>();
+        state.put("pivot", pivotIndices);
+        state.put("current", currentIndices);
+        state.put("partition", partitionIndices);
+        state.put("range", rangeIndices);
+        return state;
     }
 }
