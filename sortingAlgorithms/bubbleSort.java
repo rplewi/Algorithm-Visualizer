@@ -37,6 +37,7 @@ public class bubbleSort implements SortAlgorithm {
         }
         return true;
     }
+    
     public void reset(int[] arr){
         isDone = false;
         this.array = arr;

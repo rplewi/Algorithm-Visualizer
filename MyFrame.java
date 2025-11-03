@@ -50,7 +50,7 @@ public class MyFrame extends JFrame{
     }   
 
     public void beginSort(JPanel visualizer) {
-        timer = new Timer(30, e -> {
+        timer = new Timer(25, e -> {
             boolean done = currentAlgorithm.step();
             visualizer.repaint();
             if (done) {
