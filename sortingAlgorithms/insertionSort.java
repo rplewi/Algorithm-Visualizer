@@ -1,11 +1,11 @@
 package sortingAlgorithms;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
-public class bubbleSort implements SortAlgorithm {
+public class insertionSort implements SortAlgorithm{
     private int[] array;
     private int i = 0, j = 0;
     private boolean isDone = false;
@@ -18,31 +18,15 @@ public class bubbleSort implements SortAlgorithm {
     public boolean step(){
         int n = array.length;
         if (!isDone){
-            currentIndices.clear();
-            // When next iteration starts, and checks if its done is when to clear it.
-            if(j < n - i - 1){
-                if (array[j] > array[j + 1]){
-                    currentIndices.add(j);
-                    currentIndices.add(j+1); // Highlights yellow the two numbers being compared, should be correct.
-                    swap(j, j + 1);
-                }
-                j++;
-                return false;
+            if (j > 0 && array[j-1] > array[j] && i < n - 1){
+                swap(array[j], array[j-1]);
+                j = j - 1;
             }
-            if(i < n -  1){
-                i++;
-                j = 0;
-                
-                return false;
-            } else {
-                isDone = true;
-                
-                return true;
-            }
+            i++;
+            System.out.println("Buh");
         }
         return true;
     }
-    
     public void reset(int[] arr){
         isDone = false;
         this.array = arr;
@@ -54,7 +38,6 @@ public class bubbleSort implements SortAlgorithm {
         partitionIndices.clear();
         rangeIndices.clear();
     }
-    
     private void swap(int i, int j) {
         int temp = 0;
         temp = array[i];

@@ -14,21 +14,27 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
-
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import sortingAlgorithms.SortAlgorithm;
 import sortingAlgorithms.quickSort;
 import sortingAlgorithms.bubbleSort;
+import sortingAlgorithms.insertionSort;
+
+
 
 public class MyFrame extends JFrame{
     private int[] array;
-    private int sortNum = 0; // Placeholder for when I want specified numbers
     private SortAlgorithm currentAlgorithm;
     private Timer timer;
     private int barHeightMultiplier = 10; // Controls how tall the bars are
+    private boolean done = false;
+    private JButton stop;
+    private JButton sort;
+    private Choice dropdown;
+    private JButton reset;
+    private int algoSpeed = 15; // SPEED IN ms FOR ALGORITHM.
     
     public void randomizeArray() {
         int size = array.length;
@@ -50,11 +56,16 @@ public class MyFrame extends JFrame{
     }   
 
     public void beginSort(JPanel visualizer) {
-        timer = new Timer(25, e -> {
-            boolean done = currentAlgorithm.step();
+        timer = new Timer(algoSpeed, e -> {
+            done = currentAlgorithm.step();
             visualizer.repaint();
             if (done) {
                 ((Timer) e.getSource()).stop();
+                stop.setEnabled(false);
+                // User must reset the data before starting again.
+                dropdown.setEnabled(true);
+                reset.setEnabled(true);
+
             }
         });
         timer.start();
@@ -110,23 +121,27 @@ public class MyFrame extends JFrame{
                     g.setColor(barColor);
                     int barHeight = array[i] * barHeightMultiplier;
                     g.fillRect(i * barWidth, height - barHeight, barWidth - 1, barHeight);
+                    
                 }
             }
         };
-
+        
         JPanel nav = new JPanel();
         nav.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
-        JButton reset = new JButton("Reset");
+        reset = new JButton("Reset");
         reset.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 randomizeArray();
                 visualizer.repaint();
             }
         });
-        JButton sort = new JButton("Start Sorting");
-        Choice dropdown = new Choice();
+        sort = new JButton("Start Sorting");
+        stop = new JButton("Stop Sorting");
+        stop.setEnabled(false);
+        dropdown = new Choice();
         dropdown.add("Quick-Sort");
         dropdown.add("Bubble-Sort");
+        dropdown.add("Insertion-Sort");
         dropdown.add("More, coming soon!");
         sort.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -140,24 +155,38 @@ public class MyFrame extends JFrame{
                     currentAlgorithm = new bubbleSort();
                     break;
                 //case "Bucket-Sort": currentAlgorithm = new bucketSort();
+                case "Insertion-Sort":
+                    currentAlgorithm = new insertionSort();
+                    break;
                 default : 
                     JOptionPane.showMessageDialog(null, "Please choose a better option");
                     break;
-
                 // Add more options in the future, when algos get updated, this should be modular, so not much work needs to be done.
                 }
+                reset.setEnabled(false);
+                dropdown.setEnabled(false);
+                sort.setEnabled(false);
+                stop.setEnabled(true);
                 currentAlgorithm.reset(array);
                 beginSort(visualizer);
             }
         });
-
+        stop.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                timer.stop();
+                sort.setEnabled(true);
+                reset.setEnabled(true);
+                dropdown.setEnabled(true);
+                stop.setEnabled(false);
+            }
+        });
         nav.add(dropdown);
         nav.add(reset);
         nav.add(sort);
+        nav.add(stop);
         c.add(nav, BorderLayout.NORTH);
         visualizer.setBackground(Color.BLACK);
         c.add(visualizer, BorderLayout.CENTER);
-
         setVisible(true);
 
     }
