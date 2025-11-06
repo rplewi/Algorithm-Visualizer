@@ -29,7 +29,7 @@ public class bubbleSort implements SortAlgorithm {
                 j++;
                 return false;
             }
-            if(i < n -  1){
+            if(i < n - 1){
                 i++;
                 j = 0;
                 

@@ -65,7 +65,6 @@ public class MyFrame extends JFrame{
                 // User must reset the data before starting again.
                 dropdown.setEnabled(true);
                 reset.setEnabled(true);
-
             }
         });
         timer.start();
@@ -121,6 +120,9 @@ public class MyFrame extends JFrame{
                     g.setColor(barColor);
                     int barHeight = array[i] * barHeightMultiplier;
                     g.fillRect(i * barWidth, height - barHeight, barWidth - 1, barHeight);
+                    if (done){ // checks if visualizer is done and resets colors to white.
+                        vizState.clear();
+                    }
                     
                 }
             }
@@ -133,6 +135,7 @@ public class MyFrame extends JFrame{
             public void actionPerformed(ActionEvent e){
                 randomizeArray();
                 visualizer.repaint();
+                sort.setEnabled(true);
             }
         });
         sort = new JButton("Start Sorting");
@@ -154,7 +157,6 @@ public class MyFrame extends JFrame{
                 case "Bubble-Sort": 
                     currentAlgorithm = new bubbleSort();
                     break;
-                //case "Bucket-Sort": currentAlgorithm = new bucketSort();
                 case "Insertion-Sort":
                     currentAlgorithm = new insertionSort();
                     break;
