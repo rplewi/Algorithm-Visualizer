@@ -1,5 +1,5 @@
-package sortingAlgorithms;
+// package sortingAlgorithms;
 
-public class mergeSort {
+// public class mergeSort {
     
-}
+// }
